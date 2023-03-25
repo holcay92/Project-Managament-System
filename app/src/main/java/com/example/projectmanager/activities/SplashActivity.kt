@@ -9,9 +9,10 @@ import android.os.Looper
 import android.view.WindowInsets
 import android.view.WindowManager
 import com.example.projectmanager.databinding.ActivitySplashBinding
+import com.example.projectmanager.firebase.FireStoreClass
 
 class SplashActivity : AppCompatActivity() {
-    private var binding : ActivitySplashBinding? = null
+    private var binding: ActivitySplashBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
@@ -28,16 +29,22 @@ class SplashActivity : AppCompatActivity() {
             )
         }
         // This is used to get the file from the assets folder and set it to the title textView.
-       /* val typeface: Typeface =
-            Typeface.createFromAsset(assets, "carbon bl.ttf")
-            binding?.tvAppName?.typeface = typeface
-            TODO add a font to project
-            */
+        /* val typeface: Typeface =
+             Typeface.createFromAsset(assets, "carbon bl.ttf")
+             binding?.tvAppName?.typeface = typeface
+             TODO add a font to project
+             */
 
         Handler(Looper.getMainLooper()).postDelayed({
-            // Start the Intro Activity after 5 milliseconds.
-            startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
+            val currentUserID = FireStoreClass().getCurrentUserId()
+
+            if (currentUserID.isNotEmpty()) {
+                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            } else {
+                startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
+            }
             finish() // Call this when your activity is done and should be closed.
+            // Start the Intro or Main Activity after 5 milliseconds.
         }, 500)
     }
 }

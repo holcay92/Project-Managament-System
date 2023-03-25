@@ -23,7 +23,6 @@ class IntroActivity : BaseActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
-
        /* val typeface: Typeface =
             Typeface.createFromAsset(assets, "carbon bl.ttf")
         binding?.tvAppNameIntro?.typeface = typeface
@@ -36,6 +35,5 @@ class IntroActivity : BaseActivity() {
             // Launch the sign in screen.
             startActivity(Intent(this@IntroActivity, SignInActivity::class.java))
         }
-
     }
 }

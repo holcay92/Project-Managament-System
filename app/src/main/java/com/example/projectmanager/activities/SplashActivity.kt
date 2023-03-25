@@ -1,6 +1,5 @@
 package com.example.projectmanager.activities
 
-
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +9,6 @@ import android.os.Looper
 import android.view.WindowInsets
 import android.view.WindowManager
 import com.example.projectmanager.databinding.ActivitySplashBinding
-
 
 class SplashActivity : AppCompatActivity() {
     private var binding : ActivitySplashBinding? = null
@@ -37,10 +35,9 @@ class SplashActivity : AppCompatActivity() {
             */
 
         Handler(Looper.getMainLooper()).postDelayed({
-            // Start the Intro Activity
+            // Start the Intro Activity after 5 milliseconds.
             startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
             finish() // Call this when your activity is done and should be closed.
         }, 500)
-
     }
 }

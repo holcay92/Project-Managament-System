@@ -33,6 +33,10 @@ class IntroActivity : AppCompatActivity() {
             // Launch the sign up screen.
             startActivity(Intent(this@IntroActivity, SignUpActivity::class.java))
         }
+        binding?.btnSignInIntro?.setOnClickListener {
+            // Launch the sign in screen.
+            startActivity(Intent(this@IntroActivity, SignInActivity::class.java))
+        }
 
     }
 }

@@ -17,4 +17,6 @@
     <color name="secondary_text_color">#7A8089</color>
     <color name="primary_text_color_background">#EFF1F4</color>
     <color name="primary_ll_color_background">#EFF1F4</color>
+
+    <color name="snackbar_error_color">#F72400</color>
 </resources>

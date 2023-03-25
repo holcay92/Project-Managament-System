@@ -1,9 +1,8 @@
-package com.example.projectmanager
+package com.example.projectmanager.activities
 
-import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.WindowManager
+import com.example.projectmanager.R
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,13 +1,15 @@
-package com.example.projectmanager
+package com.example.projectmanager.activities
 
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
+import com.example.projectmanager.R
 import com.example.projectmanager.databinding.ActivitySignUpBinding
 
-class SignUpActivity : AppCompatActivity() {
+class SignUpActivity : BaseActivity() {
     private var binding: ActivitySignUpBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +26,10 @@ class SignUpActivity : AppCompatActivity() {
             )
         }
         setupActionBar()
+        binding?.btnSignUp?.setOnClickListener {
+            registerUser()
+        }
     }
-
     private fun setupActionBar() {
         // default action bar for android
         setSupportActionBar(binding?.toolbarSignUpActivity)
@@ -35,7 +39,38 @@ class SignUpActivity : AppCompatActivity() {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24dp)
         }
-
         binding?.toolbarSignUpActivity?.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+    }
+
+    private fun registerUser() {
+        // Here we get the text from editText and trim the space
+        val name: String = binding?.etName?.text.toString().trim { it <= ' ' }
+        val email: String = binding?.etEmail?.text.toString().trim { it <= ' ' }
+        val password: String = binding?.etPassword?.text.toString().trim { it <= ' ' }
+
+        if (validateForm(name, email, password)) {
+            Toast.makeText(this, "You have successfully registered.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun validateForm(name: String, email: String, password: String): Boolean {
+        return when {
+            name.isEmpty() -> {
+                showErrorSnackBar("Please enter a name.")
+                false
+            }
+            email.isEmpty() -> {
+                showErrorSnackBar("Please enter an email address.")
+                false
+            }
+            password.isEmpty() -> {
+                showErrorSnackBar("Please enter a password.")
+                false
+            }
+            else -> {
+                // Show the error message if the password is less than 6 characters.
+                true
+            }
+        }
     }
 }

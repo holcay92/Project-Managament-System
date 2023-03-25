@@ -8,6 +8,8 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.example.projectmanager.R
 import com.example.projectmanager.databinding.ActivitySignUpBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 class SignUpActivity : BaseActivity() {
     private var binding: ActivitySignUpBinding? = null
@@ -30,6 +32,7 @@ class SignUpActivity : BaseActivity() {
             registerUser()
         }
     }
+
     private fun setupActionBar() {
         // default action bar for android
         setSupportActionBar(binding?.toolbarSignUpActivity)
@@ -49,7 +52,33 @@ class SignUpActivity : BaseActivity() {
         val password: String = binding?.etPassword?.text.toString().trim { it <= ' ' }
 
         if (validateForm(name, email, password)) {
-            Toast.makeText(this, "You have successfully registered.", Toast.LENGTH_SHORT).show()
+            // Show the progress dialog.
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    // Hide the progress dialog
+                    hideProgressDialog()
+                    if (task.isSuccessful) {
+                        // The registration is success.
+                        val firebaseUser: FirebaseUser = task.result!!.user!!
+                        val registeredEmail = firebaseUser.email!!
+                        Toast.makeText(
+                            this@SignUpActivity,
+                            "$name, You have successfully registered with the email $registeredEmail",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        FirebaseAuth.getInstance().signOut()
+                        finish()
+
+                    } else {
+                        // If the registration is not successful then show error message.
+                        Toast.makeText(
+                            this@SignUpActivity,
+                            task.exception!!.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
         }
     }
 

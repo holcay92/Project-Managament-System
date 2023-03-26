@@ -30,6 +30,8 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         findViewById<NavigationView>(R.id.nav_view).setNavigationItemSelectedListener(this)
 
         FireStoreClass().signInUser(this)
+
+
     }
 
     private fun setupActionBar() {
@@ -61,7 +63,8 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_my_profile -> {
-               Toast.makeText(this@MainActivity,"My Profile",Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this@MainActivity, MyProfileActivity::class.java))
+
             }
             R.id.nav_sign_out -> {
                Toast.makeText(this@MainActivity,"Sign Out",Toast.LENGTH_SHORT).show()
@@ -85,7 +88,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
         findViewById<TextView>(R.id.tv_username).text = user.name
 
-
     }
+
 
 }

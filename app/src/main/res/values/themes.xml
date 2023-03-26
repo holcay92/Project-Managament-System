@@ -1,7 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.ProjectManager" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Primary brand color. -->
+    <style name="Theme.ProjectManager" parent= "Theme.AppCompat"   >
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
 
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -15,7 +17,17 @@
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+
     </style>
+    <!--
+       <style name="Theme.ProjectManager" parent="Theme.MaterialComponents.Light.NoActionBar"></style>
+           Primary brand color.
+      -->
+
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

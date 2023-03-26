@@ -1,7 +1,9 @@
 package com.example.projectmanager.firebase
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.util.Log
+import com.example.projectmanager.activities.MainActivity
 import com.example.projectmanager.activities.SignInActivity
 import com.example.projectmanager.activities.SignUpActivity
 import com.example.projectmanager.modals.User
@@ -36,16 +38,31 @@ class FireStoreClass {
         return currentUserID
     }
 
-    fun signInUser(activity: SignInActivity) {
+    fun signInUser(activity: Activity) {
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserId())
             .get()
             .addOnSuccessListener { document ->
                 val loggedInUser = document.toObject(User::class.java)!!
-                activity.signInSuccess(loggedInUser)
+
+                when (activity) {
+                    is SignInActivity -> {
+                        activity.signInSuccess(loggedInUser)
+                    }
+                    is MainActivity -> {
+                        activity.updateNavigationUserDetails(loggedInUser)
+                    }
+                }
             }
             .addOnFailureListener { e ->
-                activity.hideProgressDialog()
+                when (activity) {
+                    is SignInActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is MainActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
                 Log.e(activity.javaClass.simpleName, "Error while signing in the user.", e)
             }
     }

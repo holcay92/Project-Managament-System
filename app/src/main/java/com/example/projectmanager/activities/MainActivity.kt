@@ -4,16 +4,21 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.TextView
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.bumptech.glide.Glide
 import com.example.projectmanager.R
 import com.example.projectmanager.databinding.ActivityMainBinding
+import com.example.projectmanager.firebase.FireStoreClass
+import com.example.projectmanager.modals.User
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import de.hdodenhof.circleimageview.CircleImageView
 
 class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListener{
 
@@ -23,6 +28,8 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         setContentView(R.layout.activity_main)
         setupActionBar()
         findViewById<NavigationView>(R.id.nav_view).setNavigationItemSelectedListener(this)
+
+        FireStoreClass().signInUser(this)
     }
 
     private fun setupActionBar() {
@@ -68,6 +75,17 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         }
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawer(GravityCompat.START)
         return true
+    }
+    fun updateNavigationUserDetails(user: User) {
+        Glide.with(this@MainActivity)
+            .load(user.image)
+            .centerCrop()
+            .placeholder(R.drawable.ic_user_place_holder)
+            .into(findViewById<CircleImageView>(R.id.iv_user_image))
+
+        findViewById<TextView>(R.id.tv_username).text = user.name
+
+
     }
 
 }

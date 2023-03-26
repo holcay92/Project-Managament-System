@@ -9,6 +9,10 @@ The user can also add new members to the project and assign tasks to them.
 
 3rd party library used: de.hdodenhof:circleimageview:3.1.0
 
+3rd party library used: Glide 4.12.0
+
+
+
 Store the user data in the FireStore
 
 To be explained in the future

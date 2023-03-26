@@ -1,5 +1,6 @@
 package com.example.projectmanager.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -39,9 +40,9 @@ class SplashActivity : AppCompatActivity() {
             val currentUserID = FireStoreClass().getCurrentUserId()
 
             if (currentUserID.isNotEmpty()) {
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                startActivity(Intent(this, MainActivity::class.java))
             } else {
-                startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
+                startActivity(Intent(this, IntroActivity::class.java))
             }
             finish() // Call this when your activity is done and should be closed.
             // Start the Intro or Main Activity after 5 milliseconds.

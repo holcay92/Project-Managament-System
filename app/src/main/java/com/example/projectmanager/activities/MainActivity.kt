@@ -1,19 +1,15 @@
 package com.example.projectmanager.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
-import android.window.OnBackInvokedDispatcher
-import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.bumptech.glide.Glide
 import com.example.projectmanager.R
-import com.example.projectmanager.databinding.ActivityMainBinding
 import com.example.projectmanager.firebase.FireStoreClass
 import com.example.projectmanager.modals.User
 import com.google.android.material.navigation.NavigationView
@@ -29,7 +25,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         setupActionBar()
         findViewById<NavigationView>(R.id.nav_view).setNavigationItemSelectedListener(this)
 
-        FireStoreClass().signInUser(this)
+        FireStoreClass().loadUserData(this)
 
 
     }

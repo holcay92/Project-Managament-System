@@ -1,9 +1,9 @@
 package com.example.projectmanager.firebase
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.Log
 import com.example.projectmanager.activities.MainActivity
+import com.example.projectmanager.activities.MyProfileActivity
 import com.example.projectmanager.activities.SignInActivity
 import com.example.projectmanager.activities.SignUpActivity
 import com.example.projectmanager.modals.User
@@ -38,7 +38,7 @@ class FireStoreClass {
         return currentUserID
     }
 
-    fun signInUser(activity: Activity) {
+    fun loadUserData(activity: Activity) {
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserId())
             .get()
@@ -51,6 +51,10 @@ class FireStoreClass {
                     }
                     is MainActivity -> {
                         activity.updateNavigationUserDetails(loggedInUser)
+                    }
+                    is MyProfileActivity -> {
+                        activity.setUserDataInUI(loggedInUser)
+
                     }
                 }
             }

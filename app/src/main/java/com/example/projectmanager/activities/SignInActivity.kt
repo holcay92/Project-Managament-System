@@ -2,7 +2,6 @@ package com.example.projectmanager.activities
 
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -61,7 +60,7 @@ class SignInActivity : BaseActivity() {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        FireStoreClass().signInUser(this)
+                        FireStoreClass().loadUserData(this)
                        // val user = auth.currentUser
                         startActivity(Intent(this, MainActivity::class.java))
                     }else{

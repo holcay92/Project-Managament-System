@@ -23,4 +23,10 @@
     <string name="update">UPDATE</string>
     <string name="my_profile">My Profile</string>
     <string name="image_selection_failed">Photo could not be selected</string>
+
+    <string name="create_board_title">Create Board</string>
+    <string name="create">CREATE</string>
+    <string name="board_name">Board Name</string>
+    <string name="floating_action_button_description_text">add new board</string>
+    <string name="create_board">Create Board</string>
 </resources>

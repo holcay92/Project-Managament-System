@@ -10,14 +10,17 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.bumptech.glide.Glide
 import com.example.projectmanager.R
+import com.example.projectmanager.databinding.ActivityMainBinding
 import com.example.projectmanager.firebase.FireStoreClass
 import com.example.projectmanager.modals.User
+import com.example.projectmanager.utils.Constants
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import de.hdodenhof.circleimageview.CircleImageView
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
-
+    private var binding: ActivityMainBinding? = null
     companion object {
         const val MY_PROFILE_REQUEST_CODE: Int = 11
         const val TAG = "MainActivity"
@@ -25,14 +28,17 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
         setupActionBar()
         findViewById<NavigationView>(R.id.nav_view).setNavigationItemSelectedListener(this)
 
         FireStoreClass().loadUserData(this)
 
-
+        findViewById<FloatingActionButton>(R.id.fab_create_board).setOnClickListener {
+            val intent = Intent(this, CreateBoardActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupActionBar() {

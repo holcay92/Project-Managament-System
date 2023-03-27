@@ -105,9 +105,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == MY_PROFILE_REQUEST_CODE && resultCode == RESULT_OK) {
             FireStoreClass().loadUserData(this)
-        }else{
-            showErrorSnackBar("Cancelled")
-        }
+        }/*else{
+            Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
+        }*/
     }
 
 

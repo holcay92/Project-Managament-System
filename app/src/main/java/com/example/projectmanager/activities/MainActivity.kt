@@ -16,7 +16,12 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import de.hdodenhof.circleimageview.CircleImageView
 
-class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListener{
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    companion object {
+        const val MY_PROFILE_REQUEST_CODE: Int = 11
+        const val TAG = "MainActivity"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,11 +64,14 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_my_profile -> {
-                startActivity(Intent(this@MainActivity, MyProfileActivity::class.java))
+                startActivityForResult(
+                    Intent(this@MainActivity, MyProfileActivity::class.java),
+                    MY_PROFILE_REQUEST_CODE
+                )
 
             }
             R.id.nav_sign_out -> {
-               Toast.makeText(this@MainActivity,"Sign Out",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Sign Out", Toast.LENGTH_SHORT).show()
                 FirebaseAuth.getInstance().signOut()
                 val intent = Intent(this@MainActivity, IntroActivity::class.java)
                 // Clear all the activities and start new task or else it will open the previous activity.
@@ -75,6 +83,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawer(GravityCompat.START)
         return true
     }
+
     fun updateNavigationUserDetails(user: User) {
         Glide.with(this@MainActivity)
             .load(user.image)
@@ -84,6 +93,15 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
         findViewById<TextView>(R.id.tv_username).text = user.name
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == MY_PROFILE_REQUEST_CODE && resultCode == RESULT_OK) {
+            FireStoreClass().loadUserData(this)
+        }else{
+            showErrorSnackBar("Cancelled")
+        }
     }
 
 

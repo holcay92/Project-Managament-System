@@ -73,6 +73,7 @@ class SignUpActivity : BaseActivity() {
                             task.exception!!.message,
                             Toast.LENGTH_SHORT
                         ).show()
+                        hideProgressDialog()
                     }
                 }
         }

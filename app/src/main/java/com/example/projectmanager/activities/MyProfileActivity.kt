@@ -24,10 +24,12 @@ import com.google.firebase.storage.StorageReference
 
 class MyProfileActivity : BaseActivity() {
     private var binding: ActivityMyProfileBinding? = null
+
     companion object {
         private const val READ_STORAGE_PERMISSION_CODE = 1
         private const val PICK_IMAGE_REQUEST_CODE = 2
     }
+
     private lateinit var mUserDetails: User
     private var mSelectedImageFileUri: Uri? = null
     private var mProfileImageURL: String = ""
@@ -64,6 +66,7 @@ class MyProfileActivity : BaseActivity() {
             }
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_REQUEST_CODE) {
@@ -110,6 +113,7 @@ class MyProfileActivity : BaseActivity() {
             }
         }
     }
+
     private fun setupActionBar() {
         setSupportActionBar(binding?.toolbarMyProfileActivity)
         val actionBar = supportActionBar
@@ -205,6 +209,7 @@ class MyProfileActivity : BaseActivity() {
         setResult(Activity.RESULT_OK)
         finish()
     }
+
     private fun updateUserProfileData() {
 
         val userHashMap = HashMap<String, Any>()
@@ -228,8 +233,9 @@ class MyProfileActivity : BaseActivity() {
         if (anyChangesMade) {
             // Update the data in the database.
             FireStoreClass().updateUserProfileData(this@MyProfileActivity, userHashMap)
+            hideProgressDialog()
         }
-
+        hideProgressDialog()
 
     }
 }

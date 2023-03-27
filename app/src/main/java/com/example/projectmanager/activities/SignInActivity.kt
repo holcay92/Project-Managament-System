@@ -64,8 +64,9 @@ class SignInActivity : BaseActivity() {
                        // val user = auth.currentUser
                         startActivity(Intent(this, MainActivity::class.java))
                     }else{
-                        Toast.makeText(baseContext, "Authentication failed.",
+                        Toast.makeText(baseContext,  task.exception!!.message,
                             Toast.LENGTH_SHORT).show()
+                        hideProgressDialog()
                     }
                 }
         }

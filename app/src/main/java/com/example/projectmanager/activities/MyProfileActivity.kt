@@ -1,6 +1,7 @@
 package com.example.projectmanager.activities
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -59,7 +60,7 @@ class MyProfileActivity : BaseActivity() {
                 uploadUserImage()
             } else {
                 showProgressDialog(resources.getString(R.string.please_wait))
-                //updateUserProfileData()
+                updateUserProfileData()
             }
         }
     }
@@ -123,6 +124,7 @@ class MyProfileActivity : BaseActivity() {
     }
 
     fun setUserDataInUI(user: User) {
+        mUserDetails = user
         binding?.ivProfileUserImage?.let {
             Glide
                 .with(this@MyProfileActivity)
@@ -176,10 +178,9 @@ class MyProfileActivity : BaseActivity() {
 
                             // assign the image url to the variable.
                             mProfileImageURL = uri.toString()
-                            hideProgressDialog()
 
                             // Call a function to update user details in the database.
-                           // updateUserProfileData()
+                            updateUserProfileData()
                         }
                 }
                 .addOnFailureListener { exception ->
@@ -198,23 +199,37 @@ class MyProfileActivity : BaseActivity() {
     private fun getFileExtension(uri: Uri): String? {
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri))
     }
+
+    fun profileUpdateSuccess() {
+        hideProgressDialog()
+        setResult(Activity.RESULT_OK)
+        finish()
+    }
     private fun updateUserProfileData() {
 
         val userHashMap = HashMap<String, Any>()
+        var anyChangesMade = false
 
         if (mProfileImageURL.isNotEmpty() && mProfileImageURL != mUserDetails.image) {
             userHashMap[Constants.IMAGE] = mProfileImageURL
+            anyChangesMade = true
         }
 
         if (binding?.etName?.text.toString() != mUserDetails.name) {
             userHashMap[Constants.NAME] = binding?.etName?.text.toString()
+            anyChangesMade = true
         }
 
         if (binding?.etMobile?.text.toString() != mUserDetails.mobile.toString()) {
             userHashMap[Constants.MOBILE] = binding?.etMobile?.text.toString().toLong()
+            anyChangesMade = true
         }
 
-        // Update the data in the database.
-        FireStoreClass().updateUserProfileData(this@MyProfileActivity, userHashMap)
+        if (anyChangesMade) {
+            // Update the data in the database.
+            FireStoreClass().updateUserProfileData(this@MyProfileActivity, userHashMap)
+        }
+
+
     }
 }

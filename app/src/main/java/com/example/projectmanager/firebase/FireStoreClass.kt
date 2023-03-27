@@ -83,7 +83,7 @@ class FireStoreClass {
                 Toast.makeText(activity, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
 
                 // Notify the success result.
-               // activity.profileUpdateSuccess()
+                activity.profileUpdateSuccess()
             }
             .addOnFailureListener { e ->
                 activity.hideProgressDialog()
@@ -92,6 +92,7 @@ class FireStoreClass {
                     "Error while creating a board.",
                     e
                 )
+                Toast.makeText(activity, "Error while creating a board.", Toast.LENGTH_SHORT).show()
             }
     }
 

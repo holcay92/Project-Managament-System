@@ -21,6 +21,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var binding: ActivityMainBinding? = null
+    private lateinit var mUserName: String
     companion object {
         const val MY_PROFILE_REQUEST_CODE: Int = 11
         const val TAG = "MainActivity"
@@ -37,6 +38,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         findViewById<FloatingActionButton>(R.id.fab_create_board).setOnClickListener {
             val intent = Intent(this, CreateBoardActivity::class.java)
+            intent.putExtra(Constants.NAME, mUserName)
             startActivity(intent)
         }
     }
@@ -91,6 +93,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun updateNavigationUserDetails(user: User) {
+        mUserName = user.name
         Glide.with(this@MainActivity)
             .load(user.image)
             .centerCrop()

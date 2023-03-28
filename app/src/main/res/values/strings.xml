@@ -29,4 +29,6 @@
     <string name="board_name">Board Name</string>
     <string name="floating_action_button_description_text">add new board</string>
     <string name="create_board">Create Board</string>
+
+    <string name="no_boards_are_available">No Boards are available!!!</string>
 </resources>

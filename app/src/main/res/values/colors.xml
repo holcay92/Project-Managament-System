@@ -19,4 +19,6 @@
     <color name="primary_ll_color_background">#EFF1F4</color>
 
     <color name="snackbar_error_color">#F72400</color>
+
+    <color name="divider_color">#EAEAEA</color>
 </resources>

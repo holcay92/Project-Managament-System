@@ -31,7 +31,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private var myRV : RecyclerView? = null
     companion object {
         const val MY_PROFILE_REQUEST_CODE: Int = 11
+        const val CREATE_BOARD_REQUEST_CODE: Int = 12
         const val TAG = "MainActivity"
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +49,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         findViewById<FloatingActionButton>(R.id.fab_create_board).setOnClickListener {
             val intent = Intent(this, CreateBoardActivity::class.java)
             intent.putExtra(Constants.NAME, mUserName)
-            startActivity(intent)
+            startActivityForResult(intent, CREATE_BOARD_REQUEST_CODE)
         }
     }
 
@@ -140,7 +142,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             FireStoreClass().loadUserData(this)
         }/*else{
             Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
-        }*/
+        }*/else if(requestCode == CREATE_BOARD_REQUEST_CODE && resultCode == RESULT_OK){
+            FireStoreClass().getBoardList(this)
+        }
     }
 
 

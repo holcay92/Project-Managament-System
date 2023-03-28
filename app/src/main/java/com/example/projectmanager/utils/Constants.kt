@@ -9,6 +9,7 @@ import com.example.projectmanager.activities.MyProfileActivity
 
 object Constants {
 
+
     const val USERS: String = "users"
     const val BOARDS: String = "boards"
 
@@ -16,7 +17,7 @@ object Constants {
     const val NAME: String = "name"
     const val MOBILE: String = "mobile"
     const val ASSIGNED_TO: String = "assignedTo"
-
+    const val DOCUMENT_ID: String = "documentId"
     const val READ_STORAGE_PERMISSION_CODE = 1
     const val PICK_IMAGE_REQUEST_CODE = 2
 

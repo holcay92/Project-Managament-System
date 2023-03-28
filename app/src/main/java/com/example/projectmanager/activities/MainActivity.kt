@@ -62,7 +62,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             findViewById<RecyclerView>(R.id.rv_boards_list).setHasFixedSize(true)
             val adapter = BoardItemsAdapter(this, boardList)
             myRV?.adapter = adapter
-
+            adapter.setOnClickListener(object : BoardItemsAdapter.OnItemClickListener {
+                override fun onClick(position: Int, model: Board) {
+                    val intent = Intent(this@MainActivity, TaskListActivity::class.java)
+                    intent.putExtra(Constants.DOCUMENT_ID, model.documentId)
+                    startActivity(intent)
+                }
+            })
 
         } else {
           myRV?.visibility = android.view.View.GONE

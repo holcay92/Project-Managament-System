@@ -129,4 +129,18 @@ class FireStoreClass {
                 Log.e(activity.javaClass.simpleName,"Error while creating a board.",e)
             }
     }
+    fun getBoardDetails(activity: TaskListActivity,documentId: String){
+        mFireStore.collection(Constants.BOARDS)
+            .document(documentId)
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e(activity.javaClass.simpleName,document.toString())
+                val board = document.toObject(Board::class.java)!!
+                activity.boardDetails(board)
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName,"Error while creating a board.",e)
+            }
+    }
 }

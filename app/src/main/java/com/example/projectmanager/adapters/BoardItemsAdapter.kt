@@ -53,6 +53,10 @@ open class BoardItemsAdapter(private val context: Context, private var list: Arr
         fun onClick(position: Int, model: Board)
     }
 
+    fun setOnClickListener(onClickListener: OnItemClickListener) {
+        this.onClickListener = onClickListener
+    }
+
     private class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
 }

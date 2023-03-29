@@ -158,7 +158,34 @@ class FireStoreClass {
                 activity.addUpdateTaskListSuccess()
             }
             .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while creating a board.", e)
+            }
+    }
+
+    fun getAssignedMembersListDetails(activity: Activity, assignedTo: ArrayList<String>) {
+        mFireStore.collection(Constants.USERS)
+            .whereIn(Constants.ID, assignedTo)
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+                val usersList: ArrayList<User> = ArrayList()
+                for (i in document.documents) {
+                    val user = i.toObject(User::class.java)!!
+                    usersList.add(user)
+                }
+                if (activity is MemberActivity) {
+                    activity.setUpMembersList(usersList)
+                } else if (activity is TaskListActivity) {
+                    //activity.boardMembersDetailsList(usersList)
+                }
+            }
+            .addOnFailureListener { e ->
+                if (activity is MemberActivity) {
                     activity.hideProgressDialog()
+                } else if (activity is TaskListActivity) {
+                    activity.hideProgressDialog()
+                }
                 Log.e(activity.javaClass.simpleName, "Error while creating a board.", e)
             }
     }

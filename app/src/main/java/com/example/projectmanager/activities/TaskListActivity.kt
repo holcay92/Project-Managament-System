@@ -40,7 +40,9 @@ class TaskListActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_members -> {
-                startActivity(Intent(this, MemberActivity::class.java))
+                val intent = Intent(this, MemberActivity::class.java)
+                intent.putExtra(Constants.BOARD_DETAIL, mBoardDetails)
+                startActivity(intent)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -111,9 +113,13 @@ class TaskListActivity : BaseActivity() {
             FireStoreClass().getCurrentUserID(),
             cardAssignedUserList
         )
-        val cardList= mBoardDetails.taskList[position].cards
+        val cardList = mBoardDetails.taskList[position].cards
         cardList.add(card)
-        val task = Task(mBoardDetails.taskList[position].title, mBoardDetails.taskList[position].createdBy, cardList)
+        val task = Task(
+            mBoardDetails.taskList[position].title,
+            mBoardDetails.taskList[position].createdBy,
+            cardList
+        )
         mBoardDetails.taskList[position] = task
         showProgressDialog(resources.getString(R.string.please_wait))
         FireStoreClass().addUpdateTaskList(this, mBoardDetails)

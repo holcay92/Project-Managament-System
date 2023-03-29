@@ -1,5 +1,6 @@
 # Project-Management-System
-Trello Clone Application
+Trello Clone Application with Android 10.
+Some of the codes of the features are deprecated(Android 10) and will be updated in the future.
 
 Using FireBase and FireStore, this application is a clone of Trello.
 The user can create a new account and login to the application.

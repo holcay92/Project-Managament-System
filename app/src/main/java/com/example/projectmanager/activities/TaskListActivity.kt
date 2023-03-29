@@ -13,6 +13,7 @@ import com.example.projectmanager.utils.Constants
 
 class TaskListActivity : BaseActivity() {
     private var binding: ActivityTaskListBinding? = null
+    private lateinit var mBoardDetails: Board
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTaskListBinding.inflate(layoutInflater)
@@ -27,21 +28,22 @@ class TaskListActivity : BaseActivity() {
 
     }
 
-    private fun setupActionBar(title: String) {
+    private fun setupActionBar() {
         setSupportActionBar(binding?.toolbarTaskListActivity)
         var toolbar = binding?.toolbarTaskListActivity
         if (toolbar != null) {
             setSupportActionBar(toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            supportActionBar?.title = title
+            supportActionBar?.title = mBoardDetails.name
         }
         toolbar?.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
     fun boardDetails(board: Board) {
+        mBoardDetails = board
         hideProgressDialog()
-        setupActionBar(board.name)
+        setupActionBar()
 
         val addTaskList = Task(resources.getString(R.string.add_list))
         board.taskList.add(addTaskList)
@@ -51,5 +53,19 @@ class TaskListActivity : BaseActivity() {
         val adapter = TaskListItemsAdapter(this, board.taskList)
         binding?.rvTaskList?.adapter = adapter
 
+    }
+
+    fun addUpdateTaskListSuccess() {
+        hideProgressDialog()
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FireStoreClass().getBoardDetails(this, mBoardDetails.documentId)
+    }
+
+    fun createTaskList(taskListName: String) {
+        val task = Task(taskListName, FireStoreClass().getCurrentUserID())
+        mBoardDetails.taskList.add(0, task)
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FireStoreClass().addUpdateTaskList(this, mBoardDetails)
     }
 }

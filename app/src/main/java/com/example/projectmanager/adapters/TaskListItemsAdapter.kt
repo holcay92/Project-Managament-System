@@ -1,5 +1,6 @@
 package com.example.projectmanager.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectmanager.R
 import com.example.projectmanager.activities.TaskListActivity
@@ -39,6 +41,7 @@ open class TaskListItemsAdapter(private val context: Context, private var list: 
         return list.size
     }
 
+    @SuppressLint("CutPasteId")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val modal = list[position]
 
@@ -120,12 +123,19 @@ open class TaskListItemsAdapter(private val context: Context, private var list: 
                     holder.itemView.findViewById<TextView>(R.id.et_card_name).text.toString()
                 if (cardName.isNotEmpty()) {
                     if (context is TaskListActivity) {
-                       context.addCardToTaskList(position, cardName)
+                        context.addCardToTaskList(position, cardName)
                     }
                 } else {
                     Toast.makeText(context, "Please enter a card name.", Toast.LENGTH_SHORT).show()
                 }
             }
+
+            holder.itemView.findViewById<RecyclerView>(R.id.rv_card_list).layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            holder.itemView.findViewById<RecyclerView>(R.id.rv_card_list).setHasFixedSize(true)
+            val adapter = CardListItemsAdapter(context, modal.cards)
+            holder.itemView.findViewById<RecyclerView>(R.id.rv_card_list).adapter = adapter
+
         }
     }
 

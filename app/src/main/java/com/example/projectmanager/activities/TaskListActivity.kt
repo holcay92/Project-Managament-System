@@ -8,6 +8,7 @@ import com.example.projectmanager.adapters.TaskListItemsAdapter
 import com.example.projectmanager.databinding.ActivityTaskListBinding
 import com.example.projectmanager.firebase.FireStoreClass
 import com.example.projectmanager.modals.Board
+import com.example.projectmanager.modals.Card
 import com.example.projectmanager.modals.Task
 import com.example.projectmanager.utils.Constants
 
@@ -82,5 +83,24 @@ class TaskListActivity : BaseActivity() {
         mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)
         showProgressDialog(resources.getString(R.string.please_wait))
         FireStoreClass().addUpdateTaskList(this, mBoardDetails)
+    }
+
+    fun addCardToTaskList(position: Int, cardName: String) {
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)
+        val cardAssignedUserList: ArrayList<String> = ArrayList()
+        cardAssignedUserList.add(FireStoreClass().getCurrentUserID())
+        val card = Card(
+            cardName,
+            FireStoreClass().getCurrentUserID(),
+            cardAssignedUserList
+        )
+        val cardList= mBoardDetails.taskList[position].cards
+        cardList.add(card)
+        val task = Task(mBoardDetails.taskList[position].title, mBoardDetails.taskList[position].createdBy, cardList)
+        mBoardDetails.taskList[position] = task
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FireStoreClass().addUpdateTaskList(this, mBoardDetails)
+
+
     }
 }

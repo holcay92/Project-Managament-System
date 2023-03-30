@@ -32,6 +32,10 @@ class TaskListActivity : BaseActivity() {
         FireStoreClass().getBoardDetails(this, mBoardDocumentId)
 
     }
+    fun cardDetails(taskListPosition: Int, cardPosition: Int) {
+
+        startActivity(Intent(this, CardDetailsActivity::class.java))
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -55,7 +59,6 @@ class TaskListActivity : BaseActivity() {
         menuInflater.inflate(R.menu.menu_members, menu)
         return super.onCreateOptionsMenu(menu)
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_members -> {

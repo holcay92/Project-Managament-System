@@ -21,7 +21,7 @@ import com.example.projectmanager.utils.Constants
 class MemberActivity : BaseActivity() {
     private lateinit var mBoardDetails: Board
     private var binding: ActivityMemberBinding? = null
-
+    private lateinit var mAssignedMemberDetailList: ArrayList<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +34,6 @@ class MemberActivity : BaseActivity() {
         setupActionBar()
         showProgressDialog(resources.getString(R.string.please_wait))
         FireStoreClass().getAssignedMembersListDetails(this, mBoardDetails.assignedTo)
-
-
     }
 
     private fun setupActionBar() {
@@ -51,46 +49,59 @@ class MemberActivity : BaseActivity() {
         }
     }
 
-     fun setUpMembersList(list: ArrayList<User>) {
-        hideProgressDialog()
-        binding?.rvMembersList?.layoutManager = LinearLayoutManager(this)
-        binding?.rvMembersList?.setHasFixedSize(true)
-        val adapter = MemberListItemAdapter(this, list)
-        binding?.rvMembersList?.adapter = adapter
+    fun memberDetails(user: User) {
+        mBoardDetails.assignedTo.add(user.id)
+        FireStoreClass().assignMemberToBoard(this, mBoardDetails, user)
     }
-    // whenever we use the menu in the activity
-    // we need to override the onCreateOptionsMenu and onOptionsItemSelected!!
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_add_member, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_add_member -> {
-                dialogSearchMember()
-                return true
-            }
+        fun setUpMembersList(list: ArrayList<User>) {
+            mAssignedMemberDetailList = list
+            hideProgressDialog()
+            binding?.rvMembersList?.layoutManager = LinearLayoutManager(this)
+            binding?.rvMembersList?.setHasFixedSize(true)
+            val adapter = MemberListItemAdapter(this, list)
+            binding?.rvMembersList?.adapter = adapter
         }
-        return super.onOptionsItemSelected(item)
-    }
-    private fun dialogSearchMember() {
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_search_member)
-        dialog.findViewById<TextView>(R.id.tv_add).setOnClickListener {
-            val email = dialog.findViewById<TextView>(R.id.et_email_search_member).text.toString()
-            if (email.isNotEmpty()) {
+
+        // whenever we use the menu in the activity
+        // we need to override the onCreateOptionsMenu and onOptionsItemSelected!!
+        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+            menuInflater.inflate(R.menu.menu_add_member, menu)
+            return super.onCreateOptionsMenu(menu)
+        }
+
+        override fun onOptionsItemSelected(item: MenuItem): Boolean {
+            when (item.itemId) {
+                R.id.action_add_member -> {
+                    dialogSearchMember()
+                    return true
+                }
+            }
+            return super.onOptionsItemSelected(item)
+        }
+
+        private fun dialogSearchMember() {
+            val dialog = Dialog(this)
+            dialog.setContentView(R.layout.dialog_search_member)
+            dialog.findViewById<TextView>(R.id.tv_add).setOnClickListener {
+                val email =
+                    dialog.findViewById<TextView>(R.id.et_email_search_member).text.toString()
+                if (email.isNotEmpty()) {
+                    dialog.dismiss()
+                    showProgressDialog(resources.getString(R.string.please_wait))
+                    FireStoreClass().getMemberDetails(this, email)
+                } else {
+                    Toast.makeText(this, "Please enter a email", Toast.LENGTH_SHORT).show()
+                }
+            }
+            dialog.findViewById<TextView>(R.id.tv_cancel).setOnClickListener {
                 dialog.dismiss()
-                showProgressDialog(resources.getString(R.string.please_wait))
-               // FireStoreClass().getMemberDetails(this, email)
-            } else {
-                Toast.makeText(this, "Please enter a email", Toast.LENGTH_SHORT).show()
             }
+            dialog.show()
         }
-        dialog.findViewById<TextView>(R.id.tv_cancel).setOnClickListener {
-            dialog.dismiss()
-        }
-        dialog.show()
 
-
+    fun memberAssignSuccess(user: User) {
+        hideProgressDialog()
+        mAssignedMemberDetailList.add(user)
+        setUpMembersList(mAssignedMemberDetailList)
     }
 }

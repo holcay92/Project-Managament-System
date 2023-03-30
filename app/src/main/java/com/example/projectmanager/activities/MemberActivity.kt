@@ -22,6 +22,7 @@ class MemberActivity : BaseActivity() {
     private lateinit var mBoardDetails: Board
     private var binding: ActivityMemberBinding? = null
     private lateinit var mAssignedMemberDetailList: ArrayList<User>
+    private var anyChangesMade: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,9 +100,16 @@ class MemberActivity : BaseActivity() {
             dialog.show()
         }
 
+    override fun onBackPressed() {
+        if (anyChangesMade) {
+            setResult(RESULT_OK)
+        }
+        super.getOnBackPressedDispatcher().onBackPressed()
+    }
     fun memberAssignSuccess(user: User) {
         hideProgressDialog()
         mAssignedMemberDetailList.add(user)
+        anyChangesMade = true
         setUpMembersList(mAssignedMemberDetailList)
     }
 }

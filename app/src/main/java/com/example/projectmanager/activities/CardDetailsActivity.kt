@@ -12,7 +12,19 @@ class CardDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCardDetailsBinding.inflate(layoutInflater)
         setContentView(binding?.root)
+        setupActionBar()
 
     }
-
+    private fun setupActionBar() {
+        setSupportActionBar(binding?.toolbarCardDetailsActivity)
+        val actionBar = supportActionBar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+            actionBar.title = resources.getString(R.string.members)
+        }
+        binding?.toolbarCardDetailsActivity?.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+    }
 }

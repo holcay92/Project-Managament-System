@@ -2,6 +2,7 @@ package com.example.projectmanager.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import com.example.projectmanager.R
 import com.example.projectmanager.databinding.ActivityCardDetailsBinding
 import com.example.projectmanager.modals.Board
@@ -22,6 +23,9 @@ class CardDetailsActivity : AppCompatActivity() {
         setContentView(binding?.root)
         getIntentData()
         setupActionBar()
+        binding?.etNameCardDetails?.setText(mBoardDetails.taskList[mTaskList].cards[mCardPosition].name)
+        // this is to set the cursor at the end of the text
+        binding?.etNameCardDetails?.setSelection(binding?.etNameCardDetails?.text.toString().length)
 
     }
     private fun setupActionBar() {
@@ -37,6 +41,12 @@ class CardDetailsActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_delete_card, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
 
     private fun getIntentData() {
         if (intent.hasExtra(Constants.BOARD_DETAIL)) {

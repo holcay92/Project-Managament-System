@@ -32,25 +32,12 @@ class TaskListActivity : BaseActivity() {
         FireStoreClass().getBoardDetails(this, mBoardDocumentId)
 
     }
-    fun cardDetails(taskListPosition: Int, cardPosition: Int) {
-        val intent = Intent(this, CardDetailsActivity::class.java)
-        intent.putExtra(Constants.BOARD_DETAIL, mBoardDetails)
-        intent.putExtra(Constants.TASK_LIST_ITEM_POSITION, taskListPosition)
-        intent.putExtra(Constants.CARD_LIST_ITEM_POSITION, cardPosition)
-        //intent.putExtra(Constants.BOARD_MEMBERS_LIST, mBoardDetails.assignedTo)
-
-        startActivity(intent)
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
             when (requestCode) {
-                MEMBERS_REQUEST_CODE -> {
-                    showProgressDialog(resources.getString(R.string.please_wait))
-                    FireStoreClass().getBoardDetails(this, mBoardDetails.documentId)
-                }
-                CARD_DETAILS_REQUEST_CODE -> {
+                MEMBERS_REQUEST_CODE,CARD_DETAILS_REQUEST_CODE -> {
                     showProgressDialog(resources.getString(R.string.please_wait))
                     FireStoreClass().getBoardDetails(this, mBoardDetails.documentId)
                 }
@@ -74,6 +61,16 @@ class TaskListActivity : BaseActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun cardDetails(taskListPosition: Int, cardPosition: Int) {
+        val intent = Intent(this, CardDetailsActivity::class.java)
+        intent.putExtra(Constants.BOARD_DETAIL, mBoardDetails)
+        intent.putExtra(Constants.TASK_LIST_ITEM_POSITION, taskListPosition)
+        intent.putExtra(Constants.CARD_LIST_ITEM_POSITION, cardPosition)
+        //intent.putExtra(Constants.BOARD_MEMBERS_LIST, mBoardDetails.assignedTo)
+
+        startActivityForResult(intent, CARD_DETAILS_REQUEST_CODE)
     }
 
     private fun setupActionBar() {

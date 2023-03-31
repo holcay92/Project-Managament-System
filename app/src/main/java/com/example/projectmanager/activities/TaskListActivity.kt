@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectmanager.R
 import com.example.projectmanager.adapters.TaskListItemsAdapter
@@ -17,12 +18,12 @@ import com.example.projectmanager.modals.Task
 import com.example.projectmanager.utils.Constants
 
 class TaskListActivity : BaseActivity() {
-    private var binding: ActivityTaskListBinding? = null
+    private lateinit var binding: ActivityTaskListBinding
     private lateinit var mBoardDetails: Board
     private lateinit var mBoardDocumentId: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityTaskListBinding.inflate(layoutInflater)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_task_list)
         setContentView(binding?.root)
 
         if (intent.hasExtra(Constants.DOCUMENT_ID)) {

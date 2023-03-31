@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--TODO (Step 7: Design the task list screen as per requirement.)-->
-<!--START-->
+<layout>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -34,4 +33,4 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 </LinearLayout>
-    <!--END-->
+</layout>

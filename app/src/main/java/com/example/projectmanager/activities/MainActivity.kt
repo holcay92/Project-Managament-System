@@ -7,7 +7,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth
 import de.hdodenhof.circleimageview.CircleImageView
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
-    private var binding: ActivityMainBinding? = null
+    private lateinit var binding: ActivityMainBinding
 
     private lateinit var mUserName: String
 
@@ -35,13 +35,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         const val TAG = "MainActivity"
 
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
+        // data binding
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setContentView(binding.root)
         setupActionBar()
-        findViewById<NavigationView>(R.id.nav_view).setNavigationItemSelectedListener(this)
+       binding.navView.setNavigationItemSelectedListener(this)
         myRV = findViewById(R.id.rv_boards_list)
 
         FireStoreClass().loadUserData(this, true)
@@ -86,16 +86,19 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun toggleDrawer() {
-        if (findViewById<DrawerLayout>(R.id.drawer_layout).isDrawerOpen(GravityCompat.START)) {
-            findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawer(GravityCompat.START)
-        } else {
-            findViewById<DrawerLayout>(R.id.drawer_layout).openDrawer(GravityCompat.START)
+
+        binding.drawerLayout.apply {
+            if (isDrawerOpen(GravityCompat.START)) {
+                closeDrawer(GravityCompat.START)
+            } else {
+                openDrawer(GravityCompat.START)
+            }
         }
     }
 
     override fun onBackPressed() {
-        if (findViewById<DrawerLayout>(R.id.drawer_layout).isDrawerOpen(GravityCompat.START)) {
-            findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawer(GravityCompat.START)
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             doubleBackToExit()
 
@@ -121,7 +124,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 finish()
             }
         }
-        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawer(GravityCompat.START)
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
@@ -139,7 +142,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             showProgressDialog(resources.getString(R.string.please_wait))
             FireStoreClass().getBoardList(this)
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -152,6 +154,4 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             FireStoreClass().getBoardList(this)
         }
     }
-
-
 }

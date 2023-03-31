@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -115,14 +114,12 @@ class CreateBoardActivity : BaseActivity() {
     }
 
 
-
     private fun setUpActionBar() {
         setSupportActionBar(binding?.toolbarCreateBoardActivity)
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            actionBar.title = resources.getString(R.string.create_board)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+            title = resources.getString(R.string.create_board)
         }
         binding?.toolbarCreateBoardActivity?.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
 

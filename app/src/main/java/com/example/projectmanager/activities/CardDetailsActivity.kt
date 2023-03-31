@@ -6,8 +6,6 @@ import android.view.Menu
 import com.example.projectmanager.R
 import com.example.projectmanager.databinding.ActivityCardDetailsBinding
 import com.example.projectmanager.modals.Board
-import com.example.projectmanager.modals.Card
-import com.example.projectmanager.modals.Task
 import com.example.projectmanager.utils.Constants
 
 class CardDetailsActivity : AppCompatActivity() {
@@ -30,12 +28,10 @@ class CardDetailsActivity : AppCompatActivity() {
     }
     private fun setupActionBar() {
         setSupportActionBar(binding?.toolbarCardDetailsActivity)
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            actionBar.title = mBoardDetails.taskList[mTaskList].cards[mCardPosition].name
-
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+            title = mBoardDetails.taskList[mTaskList].cards[mCardPosition].name
         }
         binding?.toolbarCardDetailsActivity?.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()

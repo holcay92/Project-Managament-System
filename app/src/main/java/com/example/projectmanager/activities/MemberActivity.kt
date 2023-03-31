@@ -40,10 +40,11 @@ class MemberActivity : BaseActivity() {
     private fun setupActionBar() {
         setSupportActionBar(binding?.toolbarMembersActivity)
         val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            actionBar.title = resources.getString(R.string.members)
+        
+        actionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+            title = resources.getString(R.string.members)
         }
         binding?.toolbarMembersActivity?.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()

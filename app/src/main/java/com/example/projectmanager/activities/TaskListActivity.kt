@@ -79,9 +79,12 @@ class TaskListActivity : BaseActivity() {
         var toolbar = binding?.toolbarTaskListActivity
         if (toolbar != null) {
             setSupportActionBar(toolbar)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            supportActionBar?.title = mBoardDetails.name
+
+            supportActionBar?.apply {
+                setDisplayHomeAsUpEnabled(true)
+                setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+                title = mBoardDetails.name
+            }
         }
         toolbar?.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
@@ -93,12 +96,14 @@ class TaskListActivity : BaseActivity() {
 
         val addTaskList = Task(resources.getString(R.string.add_list))
         board.taskList.add(addTaskList)
-        binding?.rvTaskList?.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding?.rvTaskList?.setHasFixedSize(true)
-        val adapter = TaskListItemsAdapter(this, board.taskList)
-        binding?.rvTaskList?.adapter = adapter
 
+        binding.apply {
+            rvTaskList?.layoutManager =
+                LinearLayoutManager(this@TaskListActivity, LinearLayoutManager.HORIZONTAL, false)
+            rvTaskList?.setHasFixedSize(true)
+            val adapter = TaskListItemsAdapter(this@TaskListActivity, board.taskList)
+            rvTaskList?.adapter = adapter
+        }
     }
 
     fun addUpdateTaskListSuccess() {

@@ -25,11 +25,13 @@ open class BaseActivity : AppCompatActivity() {
 
     fun showProgressDialog(text: String) {
         mProgressDialog = Dialog(this)
-        mProgressDialog.setContentView(R.layout.dialog_progress)
-        mProgressDialog.findViewById<AppCompatTextView>(R.id.tv_progress_text).text = text
-        mProgressDialog.setCancelable(false)
-        mProgressDialog.setCanceledOnTouchOutside(false)
-        mProgressDialog.show()
+        mProgressDialog.apply {
+           setContentView(R.layout.dialog_progress)
+           findViewById<AppCompatTextView>(R.id.tv_progress_text).text = text
+           setCancelable(false)
+           setCanceledOnTouchOutside(false)
+            show()
+        }
     }
 
     fun hideProgressDialog() {

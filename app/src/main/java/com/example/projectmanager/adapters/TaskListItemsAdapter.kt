@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectmanager.R
 import com.example.projectmanager.activities.TaskListActivity
-import com.example.projectmanager.databinding.ItemTaskBinding
 import com.example.projectmanager.modals.Task
 
 

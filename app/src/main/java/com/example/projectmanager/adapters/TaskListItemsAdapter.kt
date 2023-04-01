@@ -40,6 +40,7 @@ open class TaskListItemsAdapter(private val context: Context, private var list: 
         return list.size
     }
 
+
     @SuppressLint("CutPasteId")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val modal = list[position]

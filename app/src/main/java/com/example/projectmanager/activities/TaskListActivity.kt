@@ -15,12 +15,14 @@ import com.example.projectmanager.firebase.FireStoreClass
 import com.example.projectmanager.modals.Board
 import com.example.projectmanager.modals.Card
 import com.example.projectmanager.modals.Task
+import com.example.projectmanager.modals.User
 import com.example.projectmanager.utils.Constants
 
 class TaskListActivity : BaseActivity() {
     private lateinit var binding: ActivityTaskListBinding
     private lateinit var mBoardDetails: Board
     private lateinit var mBoardDocumentId: String
+    private lateinit var mAssignedMemberDetailList: ArrayList<User>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_task_list)
@@ -69,7 +71,7 @@ class TaskListActivity : BaseActivity() {
         intent.putExtra(Constants.BOARD_DETAIL, mBoardDetails)
         intent.putExtra(Constants.TASK_LIST_ITEM_POSITION, taskListPosition)
         intent.putExtra(Constants.CARD_LIST_ITEM_POSITION, cardPosition)
-        //intent.putExtra(Constants.BOARD_MEMBERS_LIST, mBoardDetails.assignedTo)
+        intent.putExtra(Constants.BOARD_MEMBERS_LIST, mBoardDetails.assignedTo)
 
         startActivityForResult(intent, CARD_DETAILS_REQUEST_CODE)
     }
@@ -98,12 +100,14 @@ class TaskListActivity : BaseActivity() {
         board.taskList.add(addTaskList)
 
         binding.apply {
-            rvTaskList?.layoutManager =
+            rvTaskList.layoutManager =
                 LinearLayoutManager(this@TaskListActivity, LinearLayoutManager.HORIZONTAL, false)
-            rvTaskList?.setHasFixedSize(true)
+            rvTaskList.setHasFixedSize(true)
             val adapter = TaskListItemsAdapter(this@TaskListActivity, board.taskList)
-            rvTaskList?.adapter = adapter
+            rvTaskList.adapter = adapter
         }
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FireStoreClass().getAssignedMembersListDetails(this, mBoardDetails.assignedTo)
     }
 
     fun addUpdateTaskListSuccess() {
@@ -161,5 +165,20 @@ class TaskListActivity : BaseActivity() {
     companion object {
         const val MEMBERS_REQUEST_CODE: Int = 13
         const val CARD_DETAILS_REQUEST_CODE: Int = 14
+    }
+
+    fun boardMemberDetailList(list:ArrayList<User>){
+        mAssignedMemberDetailList = list
+        hideProgressDialog()
+        val addTaskList = Task(resources.getString(R.string.add_list))
+        mBoardDetails.taskList.add(addTaskList)
+
+        binding.apply {
+            rvTaskList.layoutManager =
+                LinearLayoutManager(this@TaskListActivity, LinearLayoutManager.HORIZONTAL, false)
+            rvTaskList.setHasFixedSize(true)
+            val adapter = TaskListItemsAdapter(this@TaskListActivity, mBoardDetails.taskList)
+            rvTaskList.adapter = adapter
+        }
     }
 }

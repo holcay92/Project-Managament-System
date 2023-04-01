@@ -12,6 +12,7 @@ import com.example.projectmanager.firebase.FireStoreClass
 import com.example.projectmanager.modals.Board
 import com.example.projectmanager.modals.Card
 import com.example.projectmanager.modals.Task
+import com.example.projectmanager.modals.User
 import com.example.projectmanager.utils.Constants
 
 class CardDetailsActivity : BaseActivity() {
@@ -21,8 +22,7 @@ class CardDetailsActivity : BaseActivity() {
     private var mTaskList = -1
     private var mCardPosition = -1
     private var mSelectedColor = ""
-
-    //private var mBoardDocumentId: String = ""
+    private lateinit var mMemberDetailList: ArrayList<User>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCardDetailsBinding.inflate(layoutInflater)
@@ -91,6 +91,9 @@ class CardDetailsActivity : BaseActivity() {
         }
         if (intent.hasExtra(Constants.CARD_LIST_ITEM_POSITION)) {
             mCardPosition = intent.getIntExtra(Constants.CARD_LIST_ITEM_POSITION, -1)
+        }
+        if (intent.hasExtra(Constants.BOARD_MEMBERS_LIST)) {
+            mMemberDetailList = intent.getParcelableArrayListExtra(Constants.BOARD_MEMBERS_LIST)!!
         }
     }
 

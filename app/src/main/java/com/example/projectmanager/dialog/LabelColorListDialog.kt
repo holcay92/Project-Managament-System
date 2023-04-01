@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.Context
 import android.view.View
 import android.widget.TextView
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectmanager.R
@@ -14,9 +13,9 @@ import com.example.projectmanager.adapters.LabelColorListAdapter
 abstract class LabelColorListDialog(
     context: Context,
     private var list: ArrayList<String>,
-    private var mSelectedColor: String,
-    private val title:String = ""
-) : Dialog(context) {
+    private val title:String = "",
+    private var mSelectedColor: String
+    ) : Dialog(context) {
 
     private var adapter: LabelColorListAdapter? = null
 

@@ -1,6 +1,7 @@
 package com.example.projectmanager.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,13 @@ open class CardListItemsAdapter(private val context: Context, private var list: 
                     onClickListener!!.onClick(position)
                 }
             }
+            if (model.labelColor.isNotEmpty()) {
+                holder.itemView.findViewById<View>(R.id.view_label_color).visibility = View.VISIBLE
+                holder.itemView.findViewById<View>(R.id.view_label_color)
+                    .setBackgroundColor(Color.parseColor(model.labelColor))
+            } else {
+                holder.itemView.findViewById<View>(R.id.view_label_color).visibility = View.GONE
+            }
         }
     }
 
@@ -44,6 +52,7 @@ open class CardListItemsAdapter(private val context: Context, private var list: 
     fun setOnClickListener(onClickListener: OnClickListener) {
         this.onClickListener = onClickListener
     }
+
     interface OnClickListener {
         fun onClick(cardPosition: Int)
     }

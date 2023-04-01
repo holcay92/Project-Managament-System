@@ -1,6 +1,5 @@
 package com.example.projectmanager.activities
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
@@ -30,10 +29,13 @@ class CardDetailsActivity : BaseActivity() {
         setContentView(binding?.root)
         getIntentData()
         setupActionBar()
+
         binding?.apply {
+
             etNameCardDetails.setText(mBoardDetails.taskList[mTaskList].cards[mCardPosition].name)
             // this is to set the cursor at the end of the text
             etNameCardDetails.setSelection(etNameCardDetails.text.toString().length)
+
             btnUpdateCardDetails.setOnClickListener {
                 if (etNameCardDetails.text.toString().isNotEmpty()) {
                     updateCardDetails()
@@ -41,9 +43,15 @@ class CardDetailsActivity : BaseActivity() {
                     showErrorSnackBar("Please enter a card name.")
                 }
             }
+
+            tvSelectLabelColor?.setOnClickListener {
+                labelColorListDialog()
+            }
         }
-        binding?.tvSelectLabelColor?.setOnClickListener {
-            labelColorListDialog()
+
+        mSelectedColor = mBoardDetails.taskList[mTaskList].cards[mCardPosition].labelColor
+        if (mSelectedColor.isNotEmpty()) {
+            setColor()
         }
     }
 
@@ -73,7 +81,6 @@ class CardDetailsActivity : BaseActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 
     private fun getIntentData() {
         if (intent.hasExtra(Constants.BOARD_DETAIL)) {
@@ -115,6 +122,7 @@ class CardDetailsActivity : BaseActivity() {
         showProgressDialog(resources.getString(R.string.please_wait))
         FireStoreClass().addUpdateTaskList(this, mBoardDetails)
     }
+
     private fun alertDialogForDeleteCard(cardName: String) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(resources.getString(R.string.alert))
@@ -132,6 +140,7 @@ class CardDetailsActivity : BaseActivity() {
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
+
     private fun labelColorListDialog() {
         val colorsList: ArrayList<String> = colorList()
         val listDialog = object : LabelColorListDialog(
@@ -147,6 +156,7 @@ class CardDetailsActivity : BaseActivity() {
         }
         listDialog.show()
     }
+
     private fun colorList(): ArrayList<String> {
         val colorList: ArrayList<String> = ArrayList()
         colorList.add("#43C86F")
@@ -158,9 +168,9 @@ class CardDetailsActivity : BaseActivity() {
         colorList.add("#0022F8")
         return colorList
     }
+
     private fun setColor() {
         binding?.tvSelectLabelColor?.text = ""
         binding?.tvSelectLabelColor?.setBackgroundColor(Color.parseColor(mSelectedColor))
-
     }
 }

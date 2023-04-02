@@ -9,7 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.projectmanager.R
-import com.example.projectmanager.adapters.CardMemberListItemAdapter
+import com.example.projectmanager.adapters.CardMemberListItemsAdapter
 import com.example.projectmanager.databinding.ActivityCardDetailsBinding
 import com.example.projectmanager.dialog.LabelColorListDialog
 import com.example.projectmanager.dialog.MembersListDialog
@@ -280,9 +280,9 @@ class CardDetailsActivity : BaseActivity() {
             binding?.rvSelectedMembersList?.layoutManager =
                 GridLayoutManager(this, 6)
 
-            val adapter = CardMemberListItemAdapter(this, selectedMembersList)
+            val adapter = CardMemberListItemsAdapter(this, selectedMembersList,true)
             binding?.rvSelectedMembersList?.adapter = adapter
-            adapter.setOnClickListener(object : CardMemberListItemAdapter.OnClickListener {
+            adapter.setOnClickListener(object : CardMemberListItemsAdapter.OnClickListener {
                 override fun onClick() {
                     membersListDialog()
                 }

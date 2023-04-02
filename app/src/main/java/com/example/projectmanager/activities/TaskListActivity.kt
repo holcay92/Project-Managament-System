@@ -171,4 +171,12 @@ class TaskListActivity : BaseActivity() {
         binding.rvTaskList.adapter = adapter
 
     }
+
+    fun updateCardsInTaskList(position: Int, cards: ArrayList<Card>) {
+        // Here we are removing the last item from the list because we have added  (add new card textview) in the adapter.
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)
+        mBoardDetails.taskList[position].cards = cards
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FireStoreClass().addUpdateTaskList(this, mBoardDetails)
+    }
 }

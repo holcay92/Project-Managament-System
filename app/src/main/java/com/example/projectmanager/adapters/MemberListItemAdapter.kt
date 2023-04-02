@@ -11,11 +11,11 @@ import com.bumptech.glide.Glide
 import com.example.projectmanager.R
 import com.example.projectmanager.modals.User
 import com.example.projectmanager.utils.Constants
-
+import de.hdodenhof.circleimageview.CircleImageView
 
 open class MemberListItemAdapter(
     private val context: Context,
-    private var list: ArrayList<User>
+    private var list: ArrayList<User>,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var onClickListener: OnClickListener? = null
@@ -29,8 +29,9 @@ open class MemberListItemAdapter(
             )
         )
     }
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
+        // errors here
         val model = list[position]
 
         if (holder is MyViewHolder) {
@@ -40,7 +41,7 @@ open class MemberListItemAdapter(
                 .load(model.image)
                 .centerCrop()
                 .placeholder(R.drawable.ic_user_place_holder)
-                .into(holder.itemView.findViewById(R.id.iv_member_image))
+                .into(holder.itemView.findViewById<CircleImageView>(R.id.iv_member_image))
 
             holder.itemView.findViewById<TextView>(R.id.tv_member_name).text = model.name
             holder.itemView.findViewById<TextView>(R.id.tv_member_email).text = model.email
@@ -54,45 +55,28 @@ open class MemberListItemAdapter(
             holder.itemView.setOnClickListener {
 
                 if (onClickListener != null) {
-                    // TODO (Step 3: Pass the constants here according to the selection.)
-                    // START
                     if (model.selected) {
                         onClickListener!!.onClick(position, model, Constants.UN_SELECT)
                     } else {
                         onClickListener!!.onClick(position, model, Constants.SELECT)
                     }
-                    // END
                 }
             }
         }
     }
 
-    /**
-     * Gets the number of items in the list
-     */
     override fun getItemCount(): Int {
         return list.size
     }
 
-    /**
-     * A function for OnClickListener where the Interface is the expected parameter..
-     */
     fun setOnClickListener(onClickListener: OnClickListener) {
         this.onClickListener = onClickListener
     }
 
-    // TODO (Step 2: Update the parameters of onclick function.)
-    // START
-    /**
-     * An interface for onclick items.
-     */
     interface OnClickListener {
         fun onClick(position: Int, user: User, action: String)
     }
-    // END
 
-    /**
-     * A ViewHolder describes an item view and metadata about its place within the RecyclerView.
-     */
+
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }

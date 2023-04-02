@@ -1,5 +1,6 @@
 package com.example.projectmanager.dialog
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
@@ -32,13 +33,12 @@ abstract class MembersListDialog(
         setUpRecyclerView(view)
     }
 
+    @SuppressLint("CutPasteId")
     private fun setUpRecyclerView(view: View) {
         view.findViewById<TextView>(R.id.tvTitle).text = title
-       // view.tvTitle.text = title
 
         if (list.size > 0) {
 
-            //view.rvList.layoutManager = LinearLayoutManager(context)
             view.findViewById<RecyclerView>(R.id.rvList).layoutManager = LinearLayoutManager(context)
             adapter = MemberListItemAdapter(context, list)
             view.findViewById<RecyclerView>(R.id.rvList).adapter = adapter

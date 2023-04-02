@@ -22,7 +22,7 @@ class TaskListActivity : BaseActivity() {
     private lateinit var binding: ActivityTaskListBinding
     private lateinit var mBoardDetails: Board
     private lateinit var mBoardDocumentId: String
-    private lateinit var mAssignedMemberDetailList: ArrayList<User>
+    lateinit var mAssignedMemberDetailList: ArrayList<User>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_task_list)
@@ -82,12 +82,11 @@ class TaskListActivity : BaseActivity() {
         if (toolbar != null) {
             setSupportActionBar(toolbar)
 
-            supportActionBar?.apply {
-                setDisplayHomeAsUpEnabled(true)
-                setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-                title = mBoardDetails.name
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+            supportActionBar?.title = mBoardDetails.name
             }
-        }
+
         toolbar?.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
@@ -96,16 +95,6 @@ class TaskListActivity : BaseActivity() {
         hideProgressDialog()
         setupActionBar()
 
-        val addTaskList = Task(resources.getString(R.string.add_list))
-        board.taskList.add(addTaskList)
-
-        binding.apply {
-            rvTaskList.layoutManager =
-                LinearLayoutManager(this@TaskListActivity, LinearLayoutManager.HORIZONTAL, false)
-            rvTaskList.setHasFixedSize(true)
-            val adapter = TaskListItemsAdapter(this@TaskListActivity, board.taskList)
-            rvTaskList.adapter = adapter
-        }
         showProgressDialog(resources.getString(R.string.please_wait))
         FireStoreClass().getAssignedMembersListDetails(this, mBoardDetails.assignedTo)
     }
@@ -170,15 +159,16 @@ class TaskListActivity : BaseActivity() {
     fun boardMemberDetailList(list:ArrayList<User>){
         mAssignedMemberDetailList = list
         hideProgressDialog()
+
         val addTaskList = Task(resources.getString(R.string.add_list))
         mBoardDetails.taskList.add(addTaskList)
 
-        binding.apply {
-            rvTaskList.layoutManager =
+
+        binding.rvTaskList.layoutManager =
                 LinearLayoutManager(this@TaskListActivity, LinearLayoutManager.HORIZONTAL, false)
-            rvTaskList.setHasFixedSize(true)
+        binding.rvTaskList.setHasFixedSize(true)
             val adapter = TaskListItemsAdapter(this@TaskListActivity, mBoardDetails.taskList)
-            rvTaskList.adapter = adapter
-        }
+        binding.rvTaskList.adapter = adapter
+
     }
 }

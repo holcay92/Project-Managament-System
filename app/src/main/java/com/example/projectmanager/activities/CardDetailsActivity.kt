@@ -3,11 +3,11 @@ package com.example.projectmanager.activities
 import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectmanager.R
 import com.example.projectmanager.adapters.CardMemberListItemAdapter
 import com.example.projectmanager.databinding.ActivityCardDetailsBinding
@@ -42,23 +42,19 @@ class CardDetailsActivity : BaseActivity() {
         getIntentData()
         setupActionBar()
 
-        binding?.apply {
+        binding?.etNameCardDetails?.setText(mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].name)
+        // this is to set the cursor at the end of the text
+        binding?.etNameCardDetails?.setSelection(binding?.etNameCardDetails?.text.toString().length)
 
-            etNameCardDetails.setText(mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].name)
-            // this is to set the cursor at the end of the text
-            etNameCardDetails.setSelection(etNameCardDetails.text.toString().length)
-
-            btnUpdateCardDetails.setOnClickListener {
-                if (etNameCardDetails.text.toString().isNotEmpty()) {
-                    updateCardDetails()
-                } else {
-                    showErrorSnackBar("Please enter a card name.")
-                }
+        binding?.btnUpdateCardDetails?.setOnClickListener {
+            if (binding?.etNameCardDetails?.text.toString().isNotEmpty()) {
+                updateCardDetails()
+            } else {
+                showErrorSnackBar("Please enter a card name.")
             }
-            tvSelectLabelColor.setOnClickListener {
-                labelColorListDialog()
-            }
-
+        }
+        binding?.tvSelectLabelColor?.setOnClickListener {
+            labelColorListDialog()
         }
         binding?.tvSelectMembers?.setOnClickListener {
             membersListDialog()
@@ -72,11 +68,11 @@ class CardDetailsActivity : BaseActivity() {
 
     private fun setupActionBar() {
         setSupportActionBar(binding?.toolbarCardDetailsActivity)
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            title = mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].name
-        }
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+        supportActionBar?.title = mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].name
+
         binding?.toolbarCardDetailsActivity?.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -210,7 +206,9 @@ class CardDetailsActivity : BaseActivity() {
             // Here we got the details of assigned members list from the global members list which is passed from the Task List screen.
             for (i in mMemberDetailList.indices) {
                 for (j in cardAssignedMembersList) {
+                    Log.i("MyTag", "line 209")
                     if (mMemberDetailList[i].id == j) { // TODO there is a bug here
+                        Log.i("MyTag", "line 211")
                         mMemberDetailList[i].selected = true
                     }
                 }
@@ -241,8 +239,8 @@ class CardDetailsActivity : BaseActivity() {
                     mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo.remove(
                         user.id
                     )
-                    for(i in mMemberDetailList.indices){
-                        if(mMemberDetailList[i].id == user.id){
+                    for (i in mMemberDetailList.indices) {
+                        if (mMemberDetailList[i].id == user.id) {
                             mMemberDetailList[i].selected = false
                         }
                     }
@@ -254,20 +252,24 @@ class CardDetailsActivity : BaseActivity() {
     }
 
     private fun setUpSelectedMembersList() {
+        Log.e("MyTAG", "setUpSelectedMembersList: at fun start")
+
         val cardAssignedMembersList =
             mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo
 
         val selectedMembersList: ArrayList<SelectedMembers> = ArrayList()
-
+        Log.e("MyTAG", "setUpSelectedMembersList: before loops")
         for (i in mMemberDetailList.indices) {
             for (j in cardAssignedMembersList) {
-                if (mMemberDetailList[i].id == j) {
+                Log.e("MyTAG", "setUpSelectedMembersList: inside for loop2")
+               /* if (mMemberDetailList[i].id == j) {
+                    Log.e("MyTAG", "setUpSelectedMembersList: inside if")
                     val selectedMember = SelectedMembers(
                         mMemberDetailList[i].id,
                         mMemberDetailList[i].image
                     )
                     selectedMembersList.add(selectedMember)
-                }
+                }*/
             }
         }
 
@@ -288,6 +290,7 @@ class CardDetailsActivity : BaseActivity() {
 
 
         } else {
+            Log.e("MyTAG", "setUpSelectedMembersList: errrrrrrooooorrr")
             binding?.rvSelectedMembersList?.visibility = View.GONE
             binding?.tvSelectMembers?.visibility = View.VISIBLE
         }

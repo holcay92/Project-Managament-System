@@ -1,7 +1,9 @@
 package com.example.projectmanager.activities
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
@@ -18,9 +20,11 @@ import com.example.projectmanager.firebase.FireStoreClass
 import com.example.projectmanager.modals.Board
 import com.example.projectmanager.modals.User
 import com.example.projectmanager.utils.Constants
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.iid.internal.FirebaseInstanceIdInternal
 import de.hdodenhof.circleimageview.CircleImageView
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -33,16 +37,31 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         const val MY_PROFILE_REQUEST_CODE: Int = 11
         const val CREATE_BOARD_REQUEST_CODE: Int = 12
         const val TAG = "MainActivity"
-
     }
+    private lateinit var mSharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // data binding
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setContentView(binding.root)
         setupActionBar()
-       binding.navView.setNavigationItemSelectedListener(this)
         myRV = findViewById(R.id.rv_boards_list)
+        binding.navView.setNavigationItemSelectedListener(this)
+
+        mSharedPreferences = getSharedPreferences(Constants.PROJECT_MANAGEMENT_PREFERENCES, MODE_PRIVATE)
+        val tokenUpdated = mSharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
+        if (tokenUpdated) {
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FireStoreClass().loadUserData(this, true)
+        }else{
+            Log.i(TAG, "Token not updated")
+           /* FirebaseInstanceIdInternal.NewTokenListener { token ->
+                Log.i(TAG, "New token: $token")
+                updateFCMToken(token)
+            }*/
+        }
+
+
 
         FireStoreClass().loadUserData(this, true)
 
@@ -117,6 +136,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             R.id.nav_sign_out -> {
                 Toast.makeText(this@MainActivity, "Sign Out", Toast.LENGTH_SHORT).show()
                 FirebaseAuth.getInstance().signOut()
+                mSharedPreferences.edit().clear().apply()
                 val intent = Intent(this@MainActivity, IntroActivity::class.java)
                 // Clear all the activities and start new task or else it will open the previous activity.
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -129,6 +149,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun updateNavigationUserDetails(user: User, readBoardList:Boolean) {
+        hideProgressDialog()
         mUserName = user.name
         Glide.with(this@MainActivity)
             .load(user.image)
@@ -153,5 +174,19 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }*/else if(requestCode == CREATE_BOARD_REQUEST_CODE && resultCode == RESULT_OK){
             FireStoreClass().getBoardList(this)
         }
+    }
+    fun tokenUpdateSuccess(){
+        hideProgressDialog()
+        val editor : SharedPreferences.Editor = mSharedPreferences.edit()
+        editor.putBoolean(Constants.FCM_TOKEN_UPDATED, true)
+        editor.apply()
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FireStoreClass().loadUserData(this, true)
+
+    }
+    private fun updateFCMToken(token: String){
+        val userHashMap = HashMap<String, Any>()
+        userHashMap[Constants.FCM_TOKEN] = token
+        FireStoreClass().updateUserProfileData(this, userHashMap)
     }
 }
